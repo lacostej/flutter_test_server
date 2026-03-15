@@ -1,0 +1,11 @@
+name: flutter_test_server_example
+description: Example app demonstrating flutter_test_server.
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_test_server:
+    path: ../

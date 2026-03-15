@@ -1,0 +1,19 @@
+# Dart/Flutter
+.dart_tool/
+.packages
+build/
+*.iml
+
+# IDE
+.idea/
+
+# Platform build artifacts
+example/android/
+example/ios/
+example/linux/
+example/macos/
+example/web/
+example/windows/
+example/build/
+example/.dart_tool/
+example/*.iml
