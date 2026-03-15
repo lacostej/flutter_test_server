@@ -17,3 +17,9 @@ example/windows/
 example/build/
 example/.dart_tool/
 example/*.iml
+example/.gitignore
+example/.metadata
+example/README.md
+example/analysis_options.yaml
+example/test/
+example/pubspec.lock
