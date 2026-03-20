@@ -28,12 +28,16 @@ class TreeNode {
     };
     if (key != null) json['key'] = key;
     if (semanticsLabel != null) json['semanticsLabel'] = semanticsLabel;
-    if (x != null || y != null || width != null || height != null) {
+    final bx = _finiteOrNull(x);
+    final by = _finiteOrNull(y);
+    final bw = _finiteOrNull(width);
+    final bh = _finiteOrNull(height);
+    if (bx != null || by != null || bw != null || bh != null) {
       json['bounds'] = {
-        if (x != null) 'x': x,
-        if (y != null) 'y': y,
-        if (width != null) 'width': width,
-        if (height != null) 'height': height,
+        if (bx != null) 'x': bx,
+        if (by != null) 'y': by,
+        if (bw != null) 'width': bw,
+        if (bh != null) 'height': bh,
       };
     }
     if (properties.isNotEmpty) json['properties'] = properties;
@@ -41,5 +45,10 @@ class TreeNode {
       json['children'] = children.map((c) => c.toJson()).toList();
     }
     return json;
+  }
+
+  static double? _finiteOrNull(double? value) {
+    if (value == null || value.isNaN || value.isInfinite) return null;
+    return value;
   }
 }
