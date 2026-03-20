@@ -9,3 +9,8 @@ dependencies:
     sdk: flutter
   flutter_test_server:
     path: ../
+
+dev_dependencies:
+  test: ^1.24.0
+  flutter_test_server_client:
+    path: ../client
