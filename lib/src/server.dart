@@ -7,6 +7,7 @@ import 'package:shelf/shelf_io.dart' as shelf_io;
 import 'package:shelf_router/shelf_router.dart' as shelf_router;
 
 import 'routes/about.dart';
+import 'routes/enter_text.dart';
 import 'routes/eval.dart';
 import 'routes/screenshot.dart';
 import 'routes/tap.dart';
@@ -95,6 +96,11 @@ class _FlutterTestServerState extends State<FlutterTestServer> {
     // /tap — dispatch a tap gesture
     router.post('/tap', (shelf.Request request) {
       return _runOnMainThread(() => handleTap(request));
+    });
+
+    // /enterText — enter text into a focused or targeted text field
+    router.post('/enterText', (shelf.Request request) {
+      return _runOnMainThread(() => handleEnterText(request));
     });
 
     // /ws — WebSocket for interactive test sessions

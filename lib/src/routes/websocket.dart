@@ -10,6 +10,7 @@ import 'package:shelf/shelf.dart';
 import 'package:shelf_web_socket/shelf_web_socket.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
+import 'enter_text.dart';
 import 'tap.dart';
 
 /// Create a shelf handler for WebSocket connections at /ws.
@@ -51,6 +52,36 @@ Handler createWebSocketHandler(
                 }
                 return Response.ok('');
               });
+              break;
+
+            case 'enterText':
+              await runOnMainThread(() async {
+                final text = json['text'] as String?;
+                if (text == null) {
+                  _send(channel, {'id': id, 'status': 'error', 'error': 'Missing "text" field'});
+                  return Response.ok('');
+                }
+                // If target specified, tap to focus first
+                final hasTarget = json.containsKey('key') ||
+                    json.containsKey('semantics') ||
+                    json.containsKey('type');
+                if (hasTarget) {
+                  final target = _resolveTarget(json);
+                  if (target != null) {
+                    dispatchTap(target);
+                    await Future.delayed(const Duration(milliseconds: 100));
+                  }
+                }
+                final result = enterTextInFocusedField(text, append: json['append'] as bool? ?? false);
+                if (result) {
+                  _send(channel, {'id': id, 'status': 'ok', 'action': 'enterText', 'text': text});
+                } else {
+                  _send(channel, {'id': id, 'status': 'error', 'error': 'No focused text field found'});
+                }
+                return Response.ok('');
+              });
+              await _waitForIdle();
+              _send(channel, {'id': id, 'event': 'idle'});
               break;
 
             case 'waitForIdle':
