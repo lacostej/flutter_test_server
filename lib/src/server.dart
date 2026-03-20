@@ -9,7 +9,9 @@ import 'package:shelf_router/shelf_router.dart' as shelf_router;
 import 'routes/about.dart';
 import 'routes/eval.dart';
 import 'routes/screenshot.dart';
+import 'routes/tap.dart';
 import 'routes/tree.dart';
+import 'routes/websocket.dart';
 import 'vm_service/eval_service.dart';
 
 /// Embeddable HTTP server that exposes a REST API for test automation.
@@ -89,6 +91,17 @@ class _FlutterTestServerState extends State<FlutterTestServer> {
         );
       }
     });
+
+    // /tap — dispatch a tap gesture
+    router.post('/tap', (shelf.Request request) {
+      return _runOnMainThread(() => handleTap(request));
+    });
+
+    // /ws — WebSocket for interactive test sessions
+    final wsHandler = createWebSocketHandler(
+      (callback) => _runOnMainThread(callback),
+    );
+    router.get('/ws', wsHandler);
 
     // CORS middleware for browser-based tools
     final handler = const shelf.Pipeline()
