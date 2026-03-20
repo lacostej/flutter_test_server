@@ -69,10 +69,14 @@ Handler createWebSocketHandler(
                   final target = _resolveTarget(json);
                   if (target != null) {
                     dispatchTap(target);
-                    await Future.delayed(const Duration(milliseconds: 100));
+                    await Future.delayed(const Duration(milliseconds: 200));
                   }
                 }
-                final result = enterTextInFocusedField(text, append: json['append'] as bool? ?? false);
+                bool result = false;
+                for (int i = 0; i < 10 && !result; i++) {
+                  result = enterTextInFocusedField(text, append: json['append'] as bool? ?? false);
+                  if (!result) await Future.delayed(const Duration(milliseconds: 100));
+                }
                 if (result) {
                   _send(channel, {'id': id, 'status': 'ok', 'action': 'enterText', 'text': text});
                 } else {

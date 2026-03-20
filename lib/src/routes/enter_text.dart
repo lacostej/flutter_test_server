@@ -43,13 +43,20 @@ Future<Response> handleEnterText(Request request) async {
         target.x! + target.width! / 2,
         target.y! + target.height! / 2,
       ));
-      // Allow the tap to process and focus the field
-      await Future.delayed(const Duration(milliseconds: 100));
+      // Allow the tap to process and focus the field across frames
+      await Future.delayed(const Duration(milliseconds: 200));
     }
   }
 
-  // Find the currently focused EditableTextState and set its value
-  final result = enterTextInFocusedField(text, append: append);
+  // Find the currently focused EditableTextState and set its value.
+  // Retry a few times since focus may take multiple frames to propagate.
+  bool result = false;
+  for (int i = 0; i < 10 && !result; i++) {
+    result = enterTextInFocusedField(text, append: append);
+    if (!result) {
+      await Future.delayed(const Duration(milliseconds: 100));
+    }
+  }
   if (!result) {
     return Response(400,
       body: jsonEncode({'error': 'No focused text field found'}),
