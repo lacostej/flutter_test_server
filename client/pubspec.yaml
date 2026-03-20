@@ -1,0 +1,10 @@
+name: flutter_test_server_client
+description: Client library for flutter_test_server — drive Flutter app tests via HTTP/WebSocket.
+version: 0.1.0
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  http: ^1.2.0
+  web_socket_channel: ^3.0.0
