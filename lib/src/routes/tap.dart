@@ -79,16 +79,22 @@ TreeNode? findTargetWidget(Map<String, dynamic> json) {
   return results.isNotEmpty ? results.first : null;
 }
 
+int _nextPointer = 100;
+
 /// Dispatch a tap (pointer down + up) at the given position.
+/// Each tap uses a unique pointer ID to avoid being ignored by the gesture system.
 void dispatchTap(Offset position) {
   final binding = GestureBinding.instance;
   final now = Duration(milliseconds: DateTime.now().millisecondsSinceEpoch);
+  final pointer = _nextPointer++;
 
   binding.handlePointerEvent(PointerDownEvent(
+    pointer: pointer,
     position: position,
     timeStamp: now,
   ));
   binding.handlePointerEvent(PointerUpEvent(
+    pointer: pointer,
     position: position,
     timeStamp: now + const Duration(milliseconds: 50),
   ));
