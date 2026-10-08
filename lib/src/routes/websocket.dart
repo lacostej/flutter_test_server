@@ -130,7 +130,7 @@ Handler createWebSocketHandler(
       },
     );
 
-    _send(channel, {'event': 'connected', 'version': '0.2.0'});
+    _send(channel, {'event': 'connected', 'version': '0.3.0'});
     debugPrint('FlutterTestServer: WebSocket client connected');
   });
 }
