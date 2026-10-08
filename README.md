@@ -52,11 +52,6 @@ curl http://localhost:8342/tree?semantics=Submit
 # Screenshot
 curl http://localhost:8342/screenshot > screenshot.png
 open screenshot.png
-
-# Evaluate Dart expression (debug/profile only)
-curl -X POST http://localhost:8342/eval \
-  -H 'Content-Type: application/json' \
-  -d '{"expression": "1 + 1"}'
 ```
 
 ## API Reference
@@ -70,7 +65,6 @@ curl -X POST http://localhost:8342/eval \
 | `/tree?semantics=Submit` | GET | Find widget by semantics label |
 | `/screenshot` | GET | Capture screen as PNG |
 | `/screenshot?pixelRatio=2` | GET | Screenshot at specific pixel ratio |
-| `/eval` | POST | Evaluate a Dart expression (debug/profile only) |
 
 ## Configuration
 
@@ -87,5 +81,4 @@ FlutterTestServer(
 - **Server**: Uses `shelf` + `shelf_router` for HTTP handling
 - **Widget tree**: Walks `WidgetsBinding.instance.rootElement` via `visitChildren()`
 - **Screenshots**: Uses `RenderRepaintBoundary.toImage()` to capture PNG
-- **Eval**: Connects to Dart VM Service via `dart:developer` (debug/profile only)
 - **Thread safety**: Route handlers dispatch to the main isolate via `addPostFrameCallback`

@@ -8,12 +8,10 @@ import 'package:shelf_router/shelf_router.dart' as shelf_router;
 
 import 'routes/about.dart';
 import 'routes/enter_text.dart';
-import 'routes/eval.dart';
 import 'routes/screenshot.dart';
 import 'routes/tap.dart';
 import 'routes/tree.dart';
 import 'routes/websocket.dart';
-import 'vm_service/eval_service.dart';
 
 /// Embeddable HTTP server that exposes a REST API for test automation.
 ///
@@ -51,7 +49,6 @@ class FlutterTestServer extends StatefulWidget {
 
 class _FlutterTestServerState extends State<FlutterTestServer> {
   HttpServer? _server;
-  final EvalService _evalService = EvalService();
 
   @override
   void initState() {
@@ -78,19 +75,6 @@ class _FlutterTestServerState extends State<FlutterTestServer> {
     // /screenshot — needs access to render objects, must run on main thread
     router.get('/screenshot', (shelf.Request request) {
       return _runOnMainThread(() => handleScreenshot(request));
-    });
-
-    // /eval — VM service calls
-    router.post('/eval', (shelf.Request request) async {
-      try {
-        return await handleEval(request, _evalService);
-      } catch (e, st) {
-        debugPrint('FlutterTestServer /eval error: $e\n$st');
-        return shelf.Response.internalServerError(
-          body: '{"error": "${e.toString().replaceAll('"', '\\"')}"}',
-          headers: {'Content-Type': 'application/json'},
-        );
-      }
     });
 
     // /tap — dispatch a tap gesture
@@ -174,7 +158,6 @@ class _FlutterTestServerState extends State<FlutterTestServer> {
   @override
   void dispose() {
     _server?.close(force: true);
-    _evalService.dispose();
     debugPrint('FlutterTestServer stopped');
     super.dispose();
   }
