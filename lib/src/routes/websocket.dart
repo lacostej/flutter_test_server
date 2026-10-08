@@ -10,6 +10,8 @@ import 'package:shelf/shelf.dart';
 import 'package:shelf_web_socket/shelf_web_socket.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
+import '../version.dart';
+
 import 'enter_text.dart';
 import 'tap.dart';
 
@@ -130,7 +132,7 @@ Handler createWebSocketHandler(
       },
     );
 
-    _send(channel, {'event': 'connected', 'version': '0.3.0'});
+    _send(channel, {'event': 'connected', 'version': serverVersion});
     debugPrint('FlutterTestServer: WebSocket client connected');
   });
 }

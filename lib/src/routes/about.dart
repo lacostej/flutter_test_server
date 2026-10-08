@@ -5,6 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shelf/shelf.dart';
 
+import '../version.dart';
+
 /// Handler for the /about endpoint.
 Response handleAbout(Request request) {
   final window = WidgetsBinding.instance.platformDispatcher.views.first;
@@ -12,7 +14,7 @@ Response handleAbout(Request request) {
 
   final info = {
     'server': 'flutter_test_server',
-    'serverVersion': '0.1.0',
+    'serverVersion': serverVersion,
     'platform': Platform.operatingSystem,
     'platformVersion': Platform.operatingSystemVersion,
     'dartVersion': Platform.version,
